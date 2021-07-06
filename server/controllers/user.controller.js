@@ -24,8 +24,8 @@ const userByID = async (req, res, next, id) => {
       return res.status('400').json({
         error: "User not found"
       })
-      req.profile = user
-      next()
+    req.profile = user
+    next()
   } catch (err) {
     return res.status('400').json({
       error: "Could not retrieve user"
@@ -41,7 +41,7 @@ const read = (req, res) => {
 
 const list = async (req, res) => {
   try {
-    let users = await User.find().select('name email updated created')
+    let users = await User.find().select('name email status updated created')
     res.json(users)
   } catch (err) {
     return res.status(400).json({

@@ -17,6 +17,10 @@ const UserSchema = new mongoose.Schema({
   status: {
     type: String,
     trim: true,
+    enum: {
+      values: ['Teacher', 'Student'],
+      message: '{VALUE} is not supported'
+    },
     required: 'Status is required'
   },
   hashed_password: {
@@ -43,7 +47,7 @@ UserSchema
   })
 
 UserSchema.path('hashed_password').validate(function(v) {
-  if (this._password && !this._password < 6) {
+  if (this._password && this._password.length < 6) {
     this.invalidate('password', 'Password must be at least 6 character')
   } 
   if (this.isNew && !this.password) {
@@ -51,7 +55,7 @@ UserSchema.path('hashed_password').validate(function(v) {
   }
 }, null)
 
-userSchema.methods = {
+UserSchema.methods = {
   authenticate: function(plainText) {
     return this.encryptPassword(plainText) === this.hashed_password
   },

@@ -10,9 +10,9 @@ const signin = async (req, res) => {
     })
     
     if (!user)
-    return res.status(401).json({
-      error: "User not found"
-    })
+      return res.status('401').json({
+        error: "User not found"
+      })
 
     if (!user.authenticate(req.body.password)) {
       return res.status('401').send({
@@ -33,7 +33,8 @@ const signin = async (req, res) => {
       user: {
         _id: user._id,
         name: user.name,
-        email: user.email
+        email: user.email,
+        status: user.status
       }
     })
   } catch (err) {
@@ -55,7 +56,7 @@ const requireSignin = expressJwt({
   userProperty: 'auth'
 })
 
-const hasAuthorization = (req, res, mext) => {
+const hasAuthorization = (req, res, next) => {
   const authorized = req.profile && req.auth && req.profile._id == req.auth._id
   if (!(authorized)) {
     return res.status('403').json({
